@@ -55,8 +55,7 @@ const BingoCard = ({
                   key={`${rowIndex}-${colIndex}`} 
                   className="bingo-cell"
                   style={{
-                    background: 'transparent',
-                    padding: `${(100 - imageScale) / 2}%`
+                    background: 'transparent'
                   }}
                 >
                   {cell && (
@@ -64,6 +63,9 @@ const BingoCard = ({
                       src={cell} 
                       alt={`Cell ${rowIndex}-${colIndex}`}
                       className="cell-image"
+                      style={{
+                        transform: `scale(${imageScale / 100})`
+                      }}
                     />
                   )}
                 </div>

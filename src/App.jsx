@@ -53,6 +53,7 @@ function App() {
       const dataUrl = await window.electron.selectImage();
       if (dataUrl) {
         setBackgroundImage(dataUrl);
+        setShowBorders(false);
       }
     } else {
       // Fallback to file input for browser
@@ -65,6 +66,7 @@ function App() {
           const reader = new FileReader();
           reader.onload = (event) => {
             setBackgroundImage(event.target.result);
+            setShowBorders(false);
           };
           reader.readAsDataURL(file);
         }
