@@ -83,12 +83,30 @@ ipcMain.handle('select-image', async () => {
     options.defaultPath = lastImageDirectory;
   }
 
-  const { filePaths } = await dialog.showOpenDialog(mainWindow, options);
+  const { filePaths } = await dialog.showOpenDialog(options);
 
   if (filePaths && filePaths.length > 0) {
     // Remember the directory for next time
     lastImageDirectory = path.dirname(filePaths[0]);
-    return filePaths[0];
+    
+    try {
+      // Read the file and convert to base64 data URL
+      const imageBuffer = fs.readFileSync(filePaths[0]);
+      const ext = path.extname(filePaths[0]).toLowerCase();
+      const mimeTypes = {
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.gif': 'image/gif',
+        '.webp': 'image/webp'
+      };
+      const mimeType = mimeTypes[ext] || 'image/jpeg';
+      const base64 = imageBuffer.toString('base64');
+      return `data:${mimeType};base64,${base64}`;
+    } catch (error) {
+      console.error('Error reading image file:', error);
+      return null;
+    }
   }
   
   return null;

@@ -20,6 +20,12 @@
   position: relative;
 }
 
+.bingo-grid {
+  display: flex;
+  flex-direction: column;
+  box-sizing: content-box;
+}
+
 .bingo-row {
   display: flex;
   flex: 1;
@@ -32,8 +38,16 @@
   align-items: center;
   justify-content: center;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.7);
   position: relative;
+}
+
+.bingo-card.no-borders .bingo-cell {
+  border: none;
+}
+
+.bingo-card.no-borders {
+  border: none;
 }
 
 .bingo-cell:not(:last-child) {

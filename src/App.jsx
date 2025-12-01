@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Slider, Checkbox } from 'antd';
 import BingoCard from './components/BingoCard';
 import { generateBingoCard } from './utils/cardGenerator';
 import { saveBingoCardAsPDF } from './utils/pdfExport';
+import 'antd/dist/reset.css';
 import './App.css';
 
 function App() {
@@ -9,7 +11,15 @@ function App() {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
-
+  const [cellOpacity, setCellOpacity] = useState(70);
+  const [showBorders, setShowBorders] = useState(true);
+  const [paddingTop, setPaddingTop] = useState(0);
+  const [paddingRight, setPaddingRight] = useState(0);
+  const [paddingBottom, setPaddingBottom] = useState(0);
+  const [paddingLeft, setPaddingLeft] = useState(0);
+  const [imageScale, setImageScale] = useState(100);
+  const [rowGap, setRowGap] = useState(0);
+  const [columnGap, setColumnGap] = useState(0);
   // Generate initial card
   useEffect(() => {
     generateNewCard();
@@ -37,10 +47,10 @@ function App() {
 
   const handleBackgroundSelect = async () => {
     if (window.electron && window.electron.selectImage) {
-      // Use Electron dialog
-      const filePath = await window.electron.selectImage();
-      if (filePath) {
-        setBackgroundImage(`file://${filePath}`);
+      // Use Electron dialog (returns base64 data URL)
+      const dataUrl = await window.electron.selectImage();
+      if (dataUrl) {
+        setBackgroundImage(dataUrl);
       }
     } else {
       // Fallback to file input for browser
@@ -73,36 +83,39 @@ function App() {
 
       <main className="app-main">
         <div className="controls">
-          <button 
+          <Button 
             onClick={generateNewCard}
-            className="btn btn-primary"
+            type="primary"
+            size="large"
           >
             🎰 Generate New Card
-          </button>
+          </Button>
           
-          <button 
+          <Button 
             onClick={handleBackgroundSelect}
-            className="btn btn-secondary"
+            size="large"
           >
             🖼️ Select Background
-          </button>
+          </Button>
 
           {backgroundImage && (
-            <button 
+            <Button 
               onClick={handleClearBackground}
-              className="btn btn-secondary"
+              size="large"
             >
               ❌ Clear Background
-            </button>
+            </Button>
           )}
 
-          <button 
+          <Button 
             onClick={handleSavePDF}
             disabled={isSaving || cardData.length === 0}
-            className="btn btn-success"
+            type="primary"
+            size="large"
+            style={{ background: '#4facfe' }}
           >
             {isSaving ? '💾 Saving...' : '💾 Save as PDF'}
-          </button>
+          </Button>
         </div>
 
         {message && (
@@ -116,8 +129,117 @@ function App() {
             <BingoCard 
               cardData={cardData} 
               backgroundImage={backgroundImage}
+              cellOpacity={cellOpacity / 100}
+              showBorders={showBorders}
+              paddingTop={paddingTop}
+              paddingRight={paddingRight}
+              paddingBottom={paddingBottom}
+              paddingLeft={paddingLeft}
+              imageScale={imageScale}
+              rowGap={rowGap}
+              columnGap={columnGap}
             />
           )}
+        </div>
+
+        <div className="settings">
+          <h3>Settings:</h3>
+          <div className="setting-group">
+            <label>Cell Opacity: {cellOpacity}%</label>
+            <Slider
+              min={0}
+              max={100}
+              step={5}
+              value={cellOpacity}
+              onChange={setCellOpacity}
+              tooltip={{ open: false }}
+            />
+          </div>
+          <div className="setting-group">
+            <Checkbox
+              checked={showBorders}
+              onChange={(e) => setShowBorders(e.target.checked)}
+            >
+              Show Grid Borders
+            </Checkbox>
+          </div>
+          <div className="setting-group">
+            <label>Image Scale: {imageScale}%</label>
+            <Slider
+              min={30}
+              max={100}
+              step={5}
+              value={imageScale}
+              onChange={setImageScale}
+              tooltip={{ open: false }}
+            />
+          </div>
+          <div className="setting-group">
+            <label>Row Gap: {rowGap}px</label>
+            <Slider
+              min={0}
+              max={30}
+              step={1}
+              value={rowGap}
+              onChange={setRowGap}
+              tooltip={{ open: false }}
+            />
+          </div>
+          <div className="setting-group">
+            <label>Column Gap: {columnGap}px</label>
+            <Slider
+              min={0}
+              max={30}
+              step={1}
+              value={columnGap}
+              onChange={setColumnGap}
+              tooltip={{ open: false }}
+            />
+          </div>
+          <div className="setting-group">
+            <label>Grid Padding Top: {paddingTop}px</label>
+            <Slider
+              min={0}
+              max={200}
+              step={1}
+              value={paddingTop}
+              onChange={setPaddingTop}
+              tooltip={{ open: false }}
+            />
+          </div>
+          <div className="setting-group">
+            <label>Grid Padding Right: {paddingRight}px</label>
+            <Slider
+              min={0}
+              max={200}
+              step={1}
+              value={paddingRight}
+              onChange={setPaddingRight}
+              tooltip={{ open: false }}
+            />
+          </div>
+          <div className="setting-group">
+            <label>Grid Padding Bottom: {paddingBottom}px</label>
+            <Slider
+              min={0}
+              max={200}
+              step={1}
+              value={paddingBottom}
+              onChange={setPaddingBottom}
+              tooltip={{ open: false }}
+            />
+          </div>
+          <div className="setting-group">
+            <label>Grid Padding Left: {paddingLeft}px</label>
+            <Slider
+              min={0}
+              max={200}
+              step={1}
+              value={paddingLeft}
+              onChange={setPaddingLeft}
+              tooltip={{ open: false }}
+            />
+          </div>
         </div>
 
         <div className="instructions">
