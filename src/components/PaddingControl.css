@@ -1,0 +1,85 @@
+.padding-control-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.padding-edge-control {
+  position: absolute;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transition: border-color 0.2s ease;
+  user-select: none;
+  border: none;
+}
+
+.padding-edge-control.top {
+  border-top: 2px dashed rgba(102, 126, 234, 0.8);
+  cursor: ns-resize;
+}
+
+.padding-edge-control.top:hover {
+  border-top-style: solid;
+  border-top-color: rgba(102, 126, 234, 1);
+}
+
+.padding-edge-control.right {
+  border-right: 2px dashed rgba(102, 126, 234, 0.8);
+  cursor: ew-resize;
+}
+
+.padding-edge-control.right:hover {
+  border-right-style: solid;
+  border-right-color: rgba(102, 126, 234, 1);
+}
+
+.padding-edge-control.bottom {
+  border-bottom: 2px dashed rgba(102, 126, 234, 0.8);
+  cursor: ns-resize;
+}
+
+.padding-edge-control.bottom:hover {
+  border-bottom-style: solid;
+  border-bottom-color: rgba(102, 126, 234, 1);
+}
+
+.padding-edge-control.left {
+  border-left: 2px dashed rgba(102, 126, 234, 0.8);
+  cursor: ew-resize;
+}
+
+.padding-edge-control.left:hover {
+  border-left-style: solid;
+  border-left-color: rgba(102, 126, 234, 1);
+}
+
+.padding-value {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.corner-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: rgba(102, 126, 234, 0.9);
+  border: 2px solid white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 11;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

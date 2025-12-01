@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Slider, Checkbox } from 'antd';
 import BingoCard from './components/BingoCard';
+import PaddingControl from './components/PaddingControl';
 import { generateBingoCard } from './utils/cardGenerator';
 import { saveBingoCardAsPDF } from './utils/pdfExport';
 import 'antd/dist/reset.css';
@@ -20,6 +21,8 @@ function App() {
   const [imageScale, setImageScale] = useState(100);
   const [rowGap, setRowGap] = useState(0);
   const [columnGap, setColumnGap] = useState(0);
+  const [showPaddingControl, setShowPaddingControl] = useState(false);
+  
   // Generate initial card
   useEffect(() => {
     generateNewCard();
@@ -124,21 +127,38 @@ function App() {
           </div>
         )}
 
-        <div className="card-preview">
+        <div className="card-preview" style={{ position: 'relative' }}>
           {cardData.length > 0 && (
-            <BingoCard 
-              cardData={cardData} 
-              backgroundImage={backgroundImage}
-              cellOpacity={cellOpacity / 100}
-              showBorders={showBorders}
-              paddingTop={paddingTop}
-              paddingRight={paddingRight}
-              paddingBottom={paddingBottom}
-              paddingLeft={paddingLeft}
-              imageScale={imageScale}
-              rowGap={rowGap}
-              columnGap={columnGap}
-            />
+            <>
+              <BingoCard 
+                cardData={cardData} 
+                backgroundImage={backgroundImage}
+                cellOpacity={cellOpacity / 100}
+                showBorders={showBorders}
+                paddingTop={paddingTop}
+                paddingRight={paddingRight}
+                paddingBottom={paddingBottom}
+                paddingLeft={paddingLeft}
+                imageScale={imageScale}
+                rowGap={rowGap}
+                columnGap={columnGap}
+              />
+              <PaddingControl
+                paddingTop={paddingTop}
+                paddingRight={paddingRight}
+                paddingBottom={paddingBottom}
+                paddingLeft={paddingLeft}
+                onPaddingChange={(edge, value) => {
+                  switch(edge) {
+                    case 'top': setPaddingTop(value); break;
+                    case 'right': setPaddingRight(value); break;
+                    case 'bottom': setPaddingBottom(value); break;
+                    case 'left': setPaddingLeft(value); break;
+                  }
+                }}
+                isVisible={showPaddingControl}
+              />
+            </>
           )}
         </div>
 
@@ -197,48 +217,12 @@ function App() {
             />
           </div>
           <div className="setting-group">
-            <label>Grid Padding Top: {paddingTop}px</label>
-            <Slider
-              min={0}
-              max={200}
-              step={1}
-              value={paddingTop}
-              onChange={setPaddingTop}
-              tooltip={{ open: false }}
-            />
-          </div>
-          <div className="setting-group">
-            <label>Grid Padding Right: {paddingRight}px</label>
-            <Slider
-              min={0}
-              max={200}
-              step={1}
-              value={paddingRight}
-              onChange={setPaddingRight}
-              tooltip={{ open: false }}
-            />
-          </div>
-          <div className="setting-group">
-            <label>Grid Padding Bottom: {paddingBottom}px</label>
-            <Slider
-              min={0}
-              max={200}
-              step={1}
-              value={paddingBottom}
-              onChange={setPaddingBottom}
-              tooltip={{ open: false }}
-            />
-          </div>
-          <div className="setting-group">
-            <label>Grid Padding Left: {paddingLeft}px</label>
-            <Slider
-              min={0}
-              max={200}
-              step={1}
-              value={paddingLeft}
-              onChange={setPaddingLeft}
-              tooltip={{ open: false }}
-            />
+            <Checkbox
+              checked={showPaddingControl}
+              onChange={(e) => setShowPaddingControl(e.target.checked)}
+            >
+              Show Padding Controls
+            </Checkbox>
           </div>
         </div>
 
