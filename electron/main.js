@@ -3,6 +3,8 @@ const path = require('path');
 const fs = require('fs');
 
 let mainWindow;
+let lastImageDirectory = null;
+let lastPdfDirectory = null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -40,9 +42,13 @@ app.on('activate', () => {
 
 // Handle save PDF request
 ipcMain.handle('save-pdf', async (event, pdfBuffer) => {
+  const defaultPath = lastPdfDirectory 
+    ? path.join(lastPdfDirectory, `bingo-card-${Date.now()}.pdf`)
+    : `bingo-card-${Date.now()}.pdf`;
+
   const { filePath } = await dialog.showSaveDialog(mainWindow, {
     title: 'Save Bingo Card',
-    defaultPath: `bingo-card-${Date.now()}.pdf`,
+    defaultPath: defaultPath,
     filters: [
       { name: 'PDF Files', extensions: ['pdf'] }
     ]
@@ -51,6 +57,8 @@ ipcMain.handle('save-pdf', async (event, pdfBuffer) => {
   if (filePath) {
     try {
       fs.writeFileSync(filePath, Buffer.from(pdfBuffer));
+      // Remember the directory for next time
+      lastPdfDirectory = path.dirname(filePath);
       return { success: true, path: filePath };
     } catch (error) {
       return { success: false, error: error.message };
@@ -62,15 +70,24 @@ ipcMain.handle('save-pdf', async (event, pdfBuffer) => {
 
 // Handle select image file
 ipcMain.handle('select-image', async () => {
-  const { filePaths } = await dialog.showOpenDialog(mainWindow, {
+  const options = {
     title: 'Select Background Image',
     filters: [
       { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp'] }
     ],
     properties: ['openFile']
-  });
+  };
+
+  // Set default path if we have a remembered directory
+  if (lastImageDirectory) {
+    options.defaultPath = lastImageDirectory;
+  }
+
+  const { filePaths } = await dialog.showOpenDialog(mainWindow, options);
 
   if (filePaths && filePaths.length > 0) {
+    // Remember the directory for next time
+    lastImageDirectory = path.dirname(filePaths[0]);
     return filePaths[0];
   }
   
