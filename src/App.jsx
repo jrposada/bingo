@@ -12,7 +12,6 @@ function App() {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
-  const [cellOpacity, setCellOpacity] = useState(70);
   const [showBorders, setShowBorders] = useState(true);
   const [paddingTop, setPaddingTop] = useState(0);
   const [paddingRight, setPaddingRight] = useState(0);
@@ -127,102 +126,92 @@ function App() {
           </div>
         )}
 
-        <div className="card-preview" style={{ position: 'relative' }}>
-          {cardData.length > 0 && (
-            <>
-              <BingoCard 
-                cardData={cardData} 
-                backgroundImage={backgroundImage}
-                cellOpacity={cellOpacity / 100}
-                showBorders={showBorders}
-                paddingTop={paddingTop}
-                paddingRight={paddingRight}
-                paddingBottom={paddingBottom}
-                paddingLeft={paddingLeft}
-                imageScale={imageScale}
-                rowGap={rowGap}
-                columnGap={columnGap}
-              />
-              <PaddingControl
-                paddingTop={paddingTop}
-                paddingRight={paddingRight}
-                paddingBottom={paddingBottom}
-                paddingLeft={paddingLeft}
-                onPaddingChange={(edge, value) => {
-                  switch(edge) {
-                    case 'top': setPaddingTop(value); break;
-                    case 'right': setPaddingRight(value); break;
-                    case 'bottom': setPaddingBottom(value); break;
-                    case 'left': setPaddingLeft(value); break;
-                  }
-                }}
-                isVisible={showPaddingControl}
-              />
-            </>
-          )}
-        </div>
+        <div className="content-container">
+          <div className="card-preview" style={{ position: 'relative' }}>
+            {cardData.length > 0 && (
+              <>
+                <BingoCard 
+                  cardData={cardData} 
+                  backgroundImage={backgroundImage}
+                  showBorders={showBorders}
+                  paddingTop={paddingTop}
+                  paddingRight={paddingRight}
+                  paddingBottom={paddingBottom}
+                  paddingLeft={paddingLeft}
+                  imageScale={imageScale}
+                  rowGap={rowGap}
+                  columnGap={columnGap}
+                />
+                <PaddingControl
+                  paddingTop={paddingTop}
+                  paddingRight={paddingRight}
+                  paddingBottom={paddingBottom}
+                  paddingLeft={paddingLeft}
+                  onPaddingChange={(edge, value) => {
+                    switch(edge) {
+                      case 'top': setPaddingTop(value); break;
+                      case 'right': setPaddingRight(value); break;
+                      case 'bottom': setPaddingBottom(value); break;
+                      case 'left': setPaddingLeft(value); break;
+                    }
+                  }}
+                  isVisible={showPaddingControl}
+                />
+              </>
+            )}
+          </div>
 
-        <div className="settings">
-          <h3>Settings:</h3>
-          <div className="setting-group">
-            <label>Cell Opacity: {cellOpacity}%</label>
-            <Slider
-              min={0}
-              max={100}
-              step={5}
-              value={cellOpacity}
-              onChange={setCellOpacity}
-              tooltip={{ open: false }}
-            />
-          </div>
-          <div className="setting-group">
-            <Checkbox
-              checked={showBorders}
-              onChange={(e) => setShowBorders(e.target.checked)}
-            >
-              Show Grid Borders
-            </Checkbox>
-          </div>
-          <div className="setting-group">
-            <label>Image Scale: {imageScale}%</label>
-            <Slider
-              min={30}
-              max={100}
-              step={5}
-              value={imageScale}
-              onChange={setImageScale}
-              tooltip={{ open: false }}
-            />
-          </div>
-          <div className="setting-group">
-            <label>Row Gap: {rowGap}px</label>
-            <Slider
-              min={0}
-              max={30}
-              step={1}
-              value={rowGap}
-              onChange={setRowGap}
-              tooltip={{ open: false }}
-            />
-          </div>
-          <div className="setting-group">
-            <label>Column Gap: {columnGap}px</label>
-            <Slider
-              min={0}
-              max={30}
-              step={1}
-              value={columnGap}
-              onChange={setColumnGap}
-              tooltip={{ open: false }}
-            />
-          </div>
-          <div className="setting-group">
-            <Checkbox
-              checked={showPaddingControl}
-              onChange={(e) => setShowPaddingControl(e.target.checked)}
-            >
-              Show Padding Controls
-            </Checkbox>
+          <div className="settings">
+            <h3>Settings:</h3>
+            <div className="setting-group">
+              <Checkbox
+                checked={showBorders}
+                onChange={(e) => setShowBorders(e.target.checked)}
+              >
+                Show Grid Borders
+              </Checkbox>
+            </div>
+            <div className="setting-group">
+              <label>Image Scale: {imageScale}%</label>
+              <Slider
+                min={30}
+                max={100}
+                step={5}
+                value={imageScale}
+                onChange={setImageScale}
+                tooltip={{ open: false }}
+              />
+            </div>
+            <div className="setting-group">
+              <label>Row Gap: {rowGap}px</label>
+              <Slider
+                min={0}
+                max={30}
+                step={1}
+                value={rowGap}
+                onChange={setRowGap}
+                tooltip={{ open: false }}
+              />
+            </div>
+            <div className="setting-group">
+              <label>Column Gap: {columnGap}px</label>
+              <Slider
+                min={0}
+                max={30}
+                step={1}
+                value={columnGap}
+                onChange={setColumnGap}
+                tooltip={{ open: false }}
+              />
+            </div>
+            <div className="setting-group">
+              <Checkbox
+                checked={showPaddingControl}
+                onChange={(e) => setShowPaddingControl(e.target.checked)}
+              >
+                Show Padding Controls
+              </Checkbox>
+            </div>
           </div>
         </div>
 

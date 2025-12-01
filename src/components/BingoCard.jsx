@@ -4,7 +4,6 @@ import './BingoCard.css';
 const BingoCard = ({ 
   cardData, 
   backgroundImage, 
-  cellOpacity = 0.7, 
   showBorders = true, 
   paddingTop = 0, 
   paddingRight = 0, 
@@ -56,7 +55,7 @@ const BingoCard = ({
                   key={`${rowIndex}-${colIndex}`} 
                   className="bingo-cell"
                   style={{
-                    background: `rgba(255, 255, 255, ${cellOpacity})`,
+                    background: 'transparent',
                     padding: `${(100 - imageScale) / 2}%`
                   }}
                 >
