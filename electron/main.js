@@ -42,17 +42,20 @@ app.on('activate', () => {
 
 // Handle save PDF request
 ipcMain.handle('save-pdf', async (event, pdfBuffer) => {
-  const defaultPath = lastPdfDirectory 
-    ? path.join(lastPdfDirectory, `bingo-card-${Date.now()}.pdf`)
-    : `bingo-card-${Date.now()}.pdf`;
-
-  const { filePath } = await dialog.showSaveDialog(mainWindow, {
+  const options = {
     title: 'Save Bingo Card',
-    defaultPath: defaultPath,
+    defaultPath: `bingo-card-${Date.now()}.pdf`,
     filters: [
       { name: 'PDF Files', extensions: ['pdf'] }
     ]
-  });
+  };
+
+  // Set default path if we have a remembered directory
+  if (lastPdfDirectory) {
+    options.defaultPath = path.join(lastPdfDirectory, `bingo-card-${Date.now()}.pdf`);
+  }
+
+  const { filePath } = await dialog.showSaveDialog(options);
 
   if (filePath) {
     try {
