@@ -31,6 +31,5 @@ jobs:
         with:
           files: |
             release/*.exe
-            release/*.msi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

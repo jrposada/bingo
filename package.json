@@ -2,6 +2,10 @@
   "name": "bingo-card-generator",
   "version": "1.0.0",
   "description": "Electron + React application to generate Bingo cards",
+  "author": {
+    "name": "Javier Rodriguez Posada",
+    "email": "jrposada.dev@gmail.com"
+  },
   "main": "electron/main.js",
   "scripts": {
     "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
@@ -29,15 +33,12 @@
       "electron/**/*"
     ],
     "directories": {
-      "buildResources": "assets",
       "output": "release"
     },
     "win": {
       "target": [
-        "nsis",
-        "msi"
-      ],
-      "icon": "assets/icon.ico"
+        "nsis"
+      ]
     }
   }
 }
