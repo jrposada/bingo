@@ -26,6 +26,8 @@ const BingoCard = ({
         <div
           className="bingo-grid"
           style={{
+            rowGap: `${rowGap}px`,
+            columnGap: `${columnGap}px`,
             paddingTop: `${paddingTop}px`,
             paddingRight: `${paddingRight}px`,
             paddingBottom: `${paddingBottom}px`,
@@ -45,6 +47,7 @@ const BingoCard = ({
                     src={cell}
                     alt={`Cell ${rowIndex}-${colIndex}`}
                     className="cell-image"
+                    style={{ transform: `scale(${imageScale / 100})` }}
                   />
                 )}
               </div>
