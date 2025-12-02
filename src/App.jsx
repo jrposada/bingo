@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Slider, Checkbox } from 'antd';
-import BingoCard from './components/BingoCard';
-import PaddingControl from './components/PaddingControl';
-import { generateBingoCard } from './utils/cardGenerator';
-import { saveBingoCardAsPDF } from './utils/pdfExport';
-import 'antd/dist/reset.css';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { Button, Slider, Checkbox } from "antd";
+import BingoCard from "./components/BingoCard";
+import PaddingControl from "./components/PaddingControl";
+import { generateBingoCard } from "./utils/cardGenerator";
+import { saveBingoCardAsPDF } from "./utils/pdfExport";
+import "antd/dist/reset.css";
+import "./App.css";
 
 function App() {
   const [cardData, setCardData] = useState([]);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [showBorders, setShowBorders] = useState(true);
   const [paddingTop, setPaddingTop] = useState(0);
   const [paddingRight, setPaddingRight] = useState(0);
@@ -23,7 +23,7 @@ function App() {
   const [showPaddingControl, setShowPaddingControl] = useState(false);
   const [rows, setRows] = useState(3);
   const [columns, setColumns] = useState(4);
-  
+
   // Generate initial card
   useEffect(() => {
     generateNewCard();
@@ -39,13 +39,13 @@ function App() {
   const generateNewCard = () => {
     const newCard = generateBingoCard(undefined, rows, columns);
     setCardData(newCard);
-    setMessage('');
+    setMessage("");
   };
 
   const handleSavePDF = async () => {
     setIsSaving(true);
-    setMessage('');
-    
+    setMessage("");
+
     try {
       const result = await saveBingoCardAsPDF();
       setMessage(result.message);
@@ -66,9 +66,9 @@ function App() {
       }
     } else {
       // Fallback to file input for browser
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
       input.onchange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -96,53 +96,47 @@ function App() {
 
       <main className="app-main">
         <div className="controls">
-          <Button 
-            onClick={generateNewCard}
-            type="primary"
-            size="large"
-          >
+          <Button onClick={generateNewCard} type="primary" size="large">
             🎰 Generate New Card
           </Button>
-          
-          <Button 
-            onClick={handleBackgroundSelect}
-            size="large"
-          >
+
+          <Button onClick={handleBackgroundSelect} size="large">
             🖼️ Select Background
           </Button>
 
           {backgroundImage && (
-            <Button 
-              onClick={handleClearBackground}
-              size="large"
-            >
+            <Button onClick={handleClearBackground} size="large">
               ❌ Clear Background
             </Button>
           )}
 
-          <Button 
+          <Button
             onClick={handleSavePDF}
             disabled={isSaving || cardData.length === 0}
             type="primary"
             size="large"
-            style={{ background: '#4facfe' }}
+            style={{ background: "#4facfe" }}
           >
-            {isSaving ? '💾 Saving...' : '💾 Save as PDF'}
+            {isSaving ? "💾 Saving..." : "💾 Save as PDF"}
           </Button>
         </div>
 
         {message && (
-          <div className={`message ${message.includes('Error') ? 'error' : 'success'}`}>
+          <div
+            className={`message ${
+              message.includes("Error") ? "error" : "success"
+            }`}
+          >
             {message}
           </div>
         )}
 
         <div className="content-container">
-          <div className="card-preview" style={{ position: 'relative' }}>
+          <div className="card-preview" style={{ position: "relative" }}>
             {cardData.length > 0 && (
               <>
-                <BingoCard 
-                  cardData={cardData} 
+                <BingoCard
+                  cardData={cardData}
                   backgroundImage={backgroundImage}
                   showBorders={showBorders}
                   paddingTop={paddingTop}
@@ -161,11 +155,19 @@ function App() {
                   paddingBottom={paddingBottom}
                   paddingLeft={paddingLeft}
                   onPaddingChange={(edge, value) => {
-                    switch(edge) {
-                      case 'top': setPaddingTop(value); break;
-                      case 'right': setPaddingRight(value); break;
-                      case 'bottom': setPaddingBottom(value); break;
-                      case 'left': setPaddingLeft(value); break;
+                    switch (edge) {
+                      case "top":
+                        setPaddingTop(value);
+                        break;
+                      case "right":
+                        setPaddingRight(value);
+                        break;
+                      case "bottom":
+                        setPaddingBottom(value);
+                        break;
+                      case "left":
+                        setPaddingLeft(value);
+                        break;
                     }
                   }}
                   isVisible={showPaddingControl}
@@ -200,10 +202,10 @@ function App() {
             </div>
             <div className="setting-group">
               <Checkbox
-                checked={showBorders}
-                onChange={(e) => setShowBorders(e.target.checked)}
+                checked={showPaddingControl}
+                onChange={(e) => setShowPaddingControl(e.target.checked)}
               >
-                Show Grid Borders
+                Show Padding Controls
               </Checkbox>
             </div>
             <div className="setting-group">
@@ -241,10 +243,10 @@ function App() {
             </div>
             <div className="setting-group">
               <Checkbox
-                checked={showPaddingControl}
-                onChange={(e) => setShowPaddingControl(e.target.checked)}
+                checked={showBorders}
+                onChange={(e) => setShowBorders(e.target.checked)}
               >
-                Show Padding Controls
+                Show Grid Borders
               </Checkbox>
             </div>
           </div>
@@ -253,10 +255,21 @@ function App() {
         <div className="instructions">
           <h3>Instructions:</h3>
           <ul>
-            <li>Click <strong>Generate New Card</strong> to create a new random bingo card</li>
-            <li>Click <strong>Select Background</strong> to add a custom background image</li>
-            <li>Click <strong>Save as PDF</strong> to export the card as a PDF file</li>
-            <li>Each column draws from a different set of images (color-coded)</li>
+            <li>
+              Click <strong>Generate New Card</strong> to create a new random
+              bingo card
+            </li>
+            <li>
+              Click <strong>Select Background</strong> to add a custom
+              background image
+            </li>
+            <li>
+              Click <strong>Save as PDF</strong> to export the card as a PDF
+              file
+            </li>
+            <li>
+              Each column draws from a different set of images (color-coded)
+            </li>
             <li>Each image appears only once per card</li>
           </ul>
         </div>
