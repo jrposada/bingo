@@ -2,7 +2,7 @@
 const generateImagePaths = (setNumber, imageCount = 9) => {
   const paths = [];
   for (let i = 1; i <= imageCount; i++) {
-    paths.push(`/src/public/assets/images/set-${setNumber}/${i}.jpg`);
+    paths.push(`/assets/images/set-${setNumber}/${i}.jpg`);
   }
   return paths;
 };
