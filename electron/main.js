@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, protocol } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -26,7 +26,25 @@ function createWindow() {
   }
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  // Register protocol for local file access
+  protocol.registerFileProtocol('local-resource', (request, callback) => {
+    const url = request.url.replace('local-resource://', '');
+    
+    let resourcePath;
+    if (app.isPackaged) {
+      // In production, extraResources are in the resources folder (parent of app.asar)
+      resourcePath = path.join(process.resourcesPath, url);
+    } else {
+      // In development, files are in the public folder
+      resourcePath = path.join(__dirname, '..', 'public', url);
+    }
+    
+    callback({ path: resourcePath });
+  });
+
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
