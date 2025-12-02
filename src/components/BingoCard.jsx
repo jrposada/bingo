@@ -34,10 +34,8 @@ const BingoCard = ({
             paddingRight: `${paddingRight}px`,
             paddingBottom: `${paddingBottom}px`,
             paddingLeft: `${paddingLeft}px`,
-            height: `calc(100% - ${paddingTop}px - ${paddingBottom}px)`,
-            width: `calc(100% - ${paddingLeft}px - ${paddingRight}px)`,
-            marginTop: `${paddingTop}px`,
-            marginLeft: `${paddingLeft}px`,
+            height: '100%',
+            width: '100%',
             rowGap: `${rowGap}px`,
             columnGap: `${columnGap}px`
           }}
@@ -56,7 +54,7 @@ const BingoCard = ({
                   className="bingo-cell"
                   style={{
                     background: 'transparent',
-                    padding: `${(100 - imageScale) / 2}%`
+                    padding: `${(100 - imageScale)}%`
                   }}
                 >
                   {cell && (
