@@ -56,27 +56,28 @@ function shuffleArray(array) {
 }
 
 /**
- * Generates a new bingo card with 4 columns and 3 rows
+ * Generates a new bingo card with the specified number of columns and rows
  * Each column uses images from its corresponding image set
  * Each image appears only once per card
  */
-export function generateBingoCard(imageSets = defaultImageSets) {
+export function generateBingoCard(imageSets = defaultImageSets, rows = 3, cols = 4) {
   const card = [];
-  const ROWS = 3;
-  const COLS = 4;
-
-  // Shuffle each column's image set and take the first ROWS images
-  const shuffledColumns = [
-    shuffleArray(imageSets.column1).slice(0, ROWS),
-    shuffleArray(imageSets.column2).slice(0, ROWS),
-    shuffleArray(imageSets.column3).slice(0, ROWS),
-    shuffleArray(imageSets.column4).slice(0, ROWS)
-  ];
+  
+  // Create array of available columns from image sets
+  const availableColumns = Object.values(imageSets);
+  
+  // Generate shuffled columns for the requested number of columns
+  const shuffledColumns = [];
+  for (let col = 0; col < cols; col++) {
+    // Use modulo to cycle through available image sets if we need more columns
+    const columnImages = availableColumns[col % availableColumns.length];
+    shuffledColumns.push(shuffleArray(columnImages).slice(0, rows));
+  }
 
   // Build the card row by row
-  for (let row = 0; row < ROWS; row++) {
+  for (let row = 0; row < rows; row++) {
     const rowData = [];
-    for (let col = 0; col < COLS; col++) {
+    for (let col = 0; col < cols; col++) {
       rowData.push(shuffledColumns[col][row]);
     }
     card.push(rowData);

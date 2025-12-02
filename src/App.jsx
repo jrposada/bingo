@@ -21,14 +21,23 @@ function App() {
   const [rowGap, setRowGap] = useState(0);
   const [columnGap, setColumnGap] = useState(0);
   const [showPaddingControl, setShowPaddingControl] = useState(false);
+  const [rows, setRows] = useState(3);
+  const [columns, setColumns] = useState(4);
   
   // Generate initial card
   useEffect(() => {
     generateNewCard();
   }, []);
 
+  // Regenerate card when rows or columns change
+  useEffect(() => {
+    if (cardData.length > 0) {
+      generateNewCard();
+    }
+  }, [rows, columns]);
+
   const generateNewCard = () => {
-    const newCard = generateBingoCard();
+    const newCard = generateBingoCard(undefined, rows, columns);
     setCardData(newCard);
     setMessage('');
   };
@@ -143,6 +152,8 @@ function App() {
                   imageScale={imageScale}
                   rowGap={rowGap}
                   columnGap={columnGap}
+                  rows={rows}
+                  columns={columns}
                 />
                 <PaddingControl
                   paddingTop={paddingTop}
@@ -165,6 +176,28 @@ function App() {
 
           <div className="settings">
             <h3>Settings:</h3>
+            <div className="setting-group">
+              <label>Rows: {rows}</label>
+              <Slider
+                min={1}
+                max={8}
+                step={1}
+                value={rows}
+                onChange={setRows}
+                tooltip={{ open: false }}
+              />
+            </div>
+            <div className="setting-group">
+              <label>Columns: {columns}</label>
+              <Slider
+                min={1}
+                max={8}
+                step={1}
+                value={columns}
+                onChange={setColumns}
+                tooltip={{ open: false }}
+              />
+            </div>
             <div className="setting-group">
               <Checkbox
                 checked={showBorders}
