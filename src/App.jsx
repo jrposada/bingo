@@ -8,7 +8,7 @@ import "antd/dist/reset.css";
 import "./App.css";
 
 function App() {
-  const [cardData, setCardData] = useState([]);
+  const [cardsData, setCardsData] = useState([]);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -24,21 +24,24 @@ function App() {
   const [rows, setRows] = useState(3);
   const [columns, setColumns] = useState(4);
 
-  // Generate initial card
+  // Generate initial cards
   useEffect(() => {
-    generateNewCard();
+    generateNewCards();
   }, []);
 
-  // Regenerate card when rows or columns change
+  // Regenerate cards when rows or columns change
   useEffect(() => {
-    if (cardData.length > 0) {
-      generateNewCard();
+    if (cardsData.length > 0) {
+      generateNewCards();
     }
   }, [rows, columns]);
 
-  const generateNewCard = () => {
-    const newCard = generateBingoCard(undefined, rows, columns);
-    setCardData(newCard);
+  const generateNewCards = () => {
+    const newCards = [];
+    for (let i = 0; i < 9; i++) {
+      newCards.push(generateBingoCard(undefined, rows, columns));
+    }
+    setCardsData(newCards);
     setMessage("");
   };
 
@@ -96,8 +99,8 @@ function App() {
 
       <main className="app-main">
         <div className="controls">
-          <Button onClick={generateNewCard} type="primary" size="large">
-            🎰 Generate New Card
+          <Button onClick={generateNewCards} type="primary" size="large">
+            🎰 Generate New Cards
           </Button>
 
           <Button onClick={handleBackgroundSelect} size="large">
@@ -112,7 +115,7 @@ function App() {
 
           <Button
             onClick={handleSavePDF}
-            disabled={isSaving || cardData.length === 0}
+            disabled={isSaving || cardsData.length === 0}
             type="primary"
             size="large"
             style={{ background: "#4facfe" }}
@@ -132,9 +135,9 @@ function App() {
         )}
 
         <div className="content-container">
-          <div className="card-preview" style={{ position: "relative" }}>
-            {cardData.length > 0 && (
-              <>
+          <div className="cards-grid-container" id="bingo-cards-container" style={{ position: "relative" }}>
+            {cardsData.map((cardData, index) => (
+              <div key={index} className="card-preview">
                 <BingoCard
                   cardData={cardData}
                   backgroundImage={backgroundImage}
@@ -149,30 +152,32 @@ function App() {
                   rows={rows}
                   columns={columns}
                 />
-                <PaddingControl
-                  paddingTop={paddingTop}
-                  paddingRight={paddingRight}
-                  paddingBottom={paddingBottom}
-                  paddingLeft={paddingLeft}
-                  onPaddingChange={(edge, value) => {
-                    switch (edge) {
-                      case "top":
-                        setPaddingTop(value);
-                        break;
-                      case "right":
-                        setPaddingRight(value);
-                        break;
-                      case "bottom":
-                        setPaddingBottom(value);
-                        break;
-                      case "left":
-                        setPaddingLeft(value);
-                        break;
-                    }
-                  }}
-                  isVisible={showPaddingControl}
-                />
-              </>
+              </div>
+            ))}
+            {cardsData.length > 0 && (
+              <PaddingControl
+                paddingTop={paddingTop}
+                paddingRight={paddingRight}
+                paddingBottom={paddingBottom}
+                paddingLeft={paddingLeft}
+                onPaddingChange={(edge, value) => {
+                  switch (edge) {
+                    case "top":
+                      setPaddingTop(value);
+                      break;
+                    case "right":
+                      setPaddingRight(value);
+                      break;
+                    case "bottom":
+                      setPaddingBottom(value);
+                      break;
+                    case "left":
+                      setPaddingLeft(value);
+                      break;
+                  }
+                }}
+                isVisible={showPaddingControl}
+              />
             )}
           </div>
 
@@ -256,16 +261,16 @@ function App() {
           <h3>Instructions:</h3>
           <ul>
             <li>
-              Click <strong>Generate New Card</strong> to create a new random
-              bingo card
+              Click <strong>Generate New Cards</strong> to create 9 new random
+              bingo cards
             </li>
             <li>
               Click <strong>Select Background</strong> to add a custom
               background image
             </li>
             <li>
-              Click <strong>Save as PDF</strong> to export the card as a PDF
-              file
+              Click <strong>Save as PDF</strong> to export all 9 cards as a single PDF
+              page
             </li>
             <li>
               Each column draws from a different set of images (color-coded)

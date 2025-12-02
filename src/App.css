@@ -31,8 +31,19 @@
   gap: 30px;
   align-items: flex-start;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1800px;
   justify-content: center;
+}
+
+.cards-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .controls {
@@ -87,8 +98,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 500px;
-  flex: 1;
 }
 
 .message {

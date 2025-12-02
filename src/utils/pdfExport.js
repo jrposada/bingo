@@ -2,18 +2,18 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 /**
- * Converts the bingo card element to PDF and saves it
+ * Converts the bingo cards container element to PDF and saves it
  */
 export async function saveBingoCardAsPDF() {
-  const cardElement = document.getElementById('bingo-card');
+  const cardsContainer = document.getElementById('bingo-cards-container');
   
-  if (!cardElement) {
-    throw new Error('Bingo card element not found');
+  if (!cardsContainer) {
+    throw new Error('Bingo cards container element not found');
   }
 
   try {
-    // Capture the card as a canvas
-    const canvas = await html2canvas(cardElement, {
+    // Capture all cards as a canvas
+    const canvas = await html2canvas(cardsContainer, {
       scale: 2, // Higher quality
       useCORS: true, // Allow cross-origin images
       backgroundColor: '#ffffff'
@@ -22,23 +22,36 @@ export async function saveBingoCardAsPDF() {
     // Convert canvas to image
     const imgData = canvas.toDataURL('image/png');
 
-    // Create PDF
+    // Create PDF in landscape orientation
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',
       format: 'a4'
     });
 
-    // Calculate dimensions to fit the card on the page
+    // Calculate dimensions to fit all 9 cards on the page
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
     
-    // Use full page dimensions with small margins
-    const margin = 10; // 10mm margin on each side
-    const width = pdfWidth - (2 * margin);
-    const height = pdfHeight - (2 * margin);
-    const x = margin;
-    const y = margin;
+    // Calculate aspect ratio to fit properly
+    const canvasAspectRatio = canvas.width / canvas.height;
+    const pdfAspectRatio = pdfWidth / pdfHeight;
+    
+    let width, height, x, y;
+    
+    if (canvasAspectRatio > pdfAspectRatio) {
+      // Canvas is wider, fit to width
+      width = pdfWidth;
+      height = pdfWidth / canvasAspectRatio;
+      x = 0;
+      y = (pdfHeight - height) / 2;
+    } else {
+      // Canvas is taller, fit to height
+      height = pdfHeight;
+      width = pdfHeight * canvasAspectRatio;
+      x = (pdfWidth - width) / 2;
+      y = 0;
+    }
 
     pdf.addImage(imgData, 'PNG', x, y, width, height);
 
@@ -55,7 +68,7 @@ export async function saveBingoCardAsPDF() {
       }
     } else {
       // Fallback to browser download
-      pdf.save(`bingo-card-${Date.now()}.pdf`);
+      pdf.save(`bingo-cards-${Date.now()}.pdf`);
       return { success: true, message: 'PDF downloaded' };
     }
   } catch (error) {
