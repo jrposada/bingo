@@ -193,7 +193,7 @@ function App() {
               <label>Columns: {columns}</label>
               <Slider
                 min={1}
-                max={8}
+                max={4}
                 step={1}
                 value={columns}
                 onChange={setColumns}
